@@ -15,8 +15,7 @@
             "Larrock\\ComponentPages\\Models\\": "src/Models"
         }
     },
-    "minimum-stability": "stable",
     "require": {
-        "fanamurov/larrock-core": "1.*"
+        "fanamurov/larrock-core": "^0.1"
     }
 }
