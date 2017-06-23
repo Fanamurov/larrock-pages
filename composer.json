@@ -1,0 +1,22 @@
+{
+    "name": "fanamurov/larrock-pages",
+    "description": "Static pages component for larrockCMS",
+    "type": "library",
+    "license": "BSD",
+    "authors": [
+        {
+            "name": "Alexandr Fanamurov",
+            "email": "fanamurov@ya.ru"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Larrock\\ComponentPages\\": "src",
+            "Larrock\\ComponentPages\\Models\\": "src/Models"
+        }
+    },
+    "minimum-stability": "stable",
+    "require": {
+        "fanamurov/larrock-core": "1.*"
+    }
+}
