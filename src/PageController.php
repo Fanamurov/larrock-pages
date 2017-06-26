@@ -17,7 +17,7 @@ class PageController extends Controller
         $this->config = $Component->shareConfig();
 	}
 
-    public function getItem($url = 'kontakty')
+    public function getItem($url)
 	{
 		$data = Cache::remember('page'. $url, 1440, function() use ($url) {
 			$page = Page::whereUrl($url)->with(['get_seo', 'getImages', 'getFiles'])->firstOrFail();
