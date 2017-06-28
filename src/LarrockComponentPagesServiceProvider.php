@@ -30,7 +30,7 @@ class LarrockComponentPagesServiceProvider extends ServiceProvider
         include __DIR__.'/routes.php';
         $this->app->make(PageComponent::class);
 
-        if ( !class_exists('CreateLarrockPageTable')){
+        if ( !class_exists('CreatePageTable')){
             // Publish the migration
             $timestamp = date('Y_m_d_His', time());
 

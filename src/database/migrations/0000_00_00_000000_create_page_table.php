@@ -3,7 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 
-class CreateLarrockPageTable extends Migration {
+class CreatePageTable extends Migration {
 
 	/**
 	 * Run the migrations.
