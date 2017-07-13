@@ -28,7 +28,7 @@ class LarrockComponentPagesServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->make(PagesComponent::class);
+        $this->app->make(PageComponent::class);
 
         if ( !class_exists('CreatePageTable')){
             // Publish the migration
