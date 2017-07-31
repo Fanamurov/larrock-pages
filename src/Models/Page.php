@@ -8,7 +8,7 @@ use Nicolaslopezj\Searchable\SearchableTrait;
 use Spatie\MediaLibrary\HasMedia\HasMediaTrait;
 use Spatie\MediaLibrary\HasMedia\Interfaces\HasMedia;
 use Spatie\MediaLibrary\HasMedia\Interfaces\HasMediaConversions;
-use Larrock\ComponentPages;
+use Larrock\ComponentPages\Facades\LarrockPages;
 
 /**
  * Larrock\Models\Page
@@ -82,19 +82,16 @@ class Page extends Model implements HasMediaConversions
 
 	public function getImages()
 	{
-        $config = new ComponentPages\PageComponent();
-		return $this->hasMany('Spatie\MediaLibrary\Media', 'model_id', 'id')->where([['model_type', '=', $config->model], ['collection_name', '=', 'images']])->orderBy('order_column', 'DESC');
+		return $this->hasMany('Spatie\MediaLibrary\Media', 'model_id', 'id')->where([['model_type', '=', LarrockPages::getModelName()], ['collection_name', '=', 'images']])->orderBy('order_column', 'DESC');
 	}
 	public function getFirstImage()
 	{
-        $config = new ComponentPages\PageComponent();
-		return $this->hasOne('Spatie\MediaLibrary\Media', 'model_id', 'id')->where([['model_type', '=', $config->model], ['collection_name', '=', 'images']])->orderBy('order_column', 'DESC');
+		return $this->hasOne('Spatie\MediaLibrary\Media', 'model_id', 'id')->where([['model_type', '=', LarrockPages::getModelName()], ['collection_name', '=', 'images']])->orderBy('order_column', 'DESC');
 	}
 
     public function getFiles()
     {
-        $config = new ComponentPages\PageComponent();
-        return $this->hasMany('Spatie\MediaLibrary\Media', 'model_id', 'id')->where([['model_type', '=', $config->model], ['collection_name', '=', 'files']])->orderBy('order_column', 'DESC');
+        return $this->hasMany('Spatie\MediaLibrary\Media', 'model_id', 'id')->where([['model_type', '=', LarrockPages::getModelName()], ['collection_name', '=', 'files']])->orderBy('order_column', 'DESC');
     }
 
 	public function getGetSeoTitleAttribute()

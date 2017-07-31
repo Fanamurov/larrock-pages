@@ -6,21 +6,19 @@ use App\Http\Controllers\Controller;
 use Larrock\Core\Helpers\Plugins\RenderGallery;
 use Cache;
 use Larrock\ComponentPages\Models\Page;
+use Larrock\ComponentPages\Facades\LarrockPages;
 
 class PageController extends Controller
 {
-	protected $config;
-
 	public function __construct()
 	{
-        $Component = new PageComponent();
-        $this->config = $Component->shareConfig();
+        LarrockPages::shareConfig();
 	}
 
     public function getItem($url)
 	{
 		$data = Cache::remember('page'. $url, 1440, function() use ($url) {
-			$page = Page::whereUrl($url)->with(['get_seo', 'getImages', 'getFiles'])->firstOrFail();
+			$page = LarrockPages::getModel()->whereUrl($url)->with(['get_seo', 'getImages', 'getFiles'])->firstOrFail();
 			$renderGallery = new RenderGallery();
 			$data['data'] = $renderGallery->renderFilesGallery($renderGallery->renderGallery($page));
 		    return $data;

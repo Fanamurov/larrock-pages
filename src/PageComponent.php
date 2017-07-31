@@ -6,6 +6,7 @@ use Larrock\Core\Component;
 use Larrock\Core\Helpers\FormBuilder\FormDate;
 use Larrock\Core\Helpers\FormBuilder\FormInput;
 use Larrock\Core\Helpers\FormBuilder\FormTextarea;
+use Larrock\ComponentPages\Facades\LarrockPages;
 use Larrock\ComponentPages\Models\Page;
 
 class PageComponent extends Component
@@ -15,7 +16,7 @@ class PageComponent extends Component
         $this->name = $this->table = 'page';
         $this->title = 'Страницы';
         $this->description = 'Страницы без привязки к определенному разделу';
-        $this->model = Page::class;
+        $this->model = \config('larrock.models.pages', Page::class);
         $this->addRows()->addPositionAndActive()->isSearchable()->addPlugins();
     }
 
@@ -41,15 +42,15 @@ class PageComponent extends Component
 
     public function renderAdminMenu()
     {
-        $count = \Cache::remember('count-data-admin-'. $this->name, 1440, function(){
-            return Page::count(['id']);
+        $count = \Cache::remember('count-data-admin-'. LarrockPages::getName(), 1440, function(){
+            return LarrockPages::getModel()->count(['id']);
         });
-        $dropdown = Page::whereActive(1)->orderBy('position', 'desc')->get(['id', 'title', 'url']);
-        return view('larrock::admin.sectionmenu.types.dropdown', ['count' => $count, 'app' => $this, 'url' => '/admin/'. $this->name, 'dropdown' => $dropdown]);
+        $dropdown = LarrockPages::getModel()->whereActive(1)->orderBy('position', 'desc')->get(['id', 'title', 'url']);
+        return view('larrock::admin.sectionmenu.types.dropdown', ['count' => $count, 'app' => LarrockPages::getConfig(), 'url' => '/admin/'. LarrockPages::getName(), 'dropdown' => $dropdown]);
     }
 
     public function createSitemap()
     {
-        return Page::whereActive(1)->get();
+        return LarrockPages::getModel()->whereActive(1)->get();
     }
 }
