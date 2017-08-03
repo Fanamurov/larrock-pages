@@ -77,7 +77,7 @@ class Page extends Model implements HasMediaConversions
 
 	public function get_seo()
 	{
-		return $this->hasOne(Seo::class, 'id_connect', 'id')->whereTypeConnect('page');
+		return $this->hasOne(Seo::class, 'seo_id_connect', 'id')->whereSeoTypeConnect('page');
 	}
 
 	public function getImages()
@@ -96,10 +96,10 @@ class Page extends Model implements HasMediaConversions
 
 	public function getGetSeoTitleAttribute()
 	{
-		if($get_seo = Seo::whereUrlConnect($this->url)->whereTypeConnect('page')->first()){
+		if($get_seo = Seo::whereSeoUrlConnect($this->url)->whereSeoTypeConnect('page')->first()){
 			return $get_seo->seo_title;
 		}
-		if($get_seo = Seo::whereIdConnect($this->id)->whereTypeConnect('page')->first()){
+		if($get_seo = Seo::whereSeoIdConnect($this->id)->whereSeoTypeConnect('page')->first()){
 			return $get_seo->seo_title;
 		}
 		return $this->title;
