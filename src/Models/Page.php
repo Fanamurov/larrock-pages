@@ -47,6 +47,13 @@ class Page extends Model implements HasMediaConversions
 	use HasMediaTrait;
     use SearchableTrait;
 
+    public function __construct(array $attributes = [])
+    {
+        parent::__construct($attributes);
+        $this->fillable(LarrockPages::addFillableUserRows(['title', 'short', 'description', 'url', 'date', 'position', 'active']));
+        $this->table = LarrockPages::getConfig()->table;
+    }
+
     protected $searchable = [
         'columns' => [
             'page.title' => 10
@@ -63,10 +70,6 @@ class Page extends Model implements HasMediaConversions
 			->setManipulations(['w' => 140, 'h' => 140])
 			->performOnCollections('images');
 	}
-
-    protected $table = 'page';
-
-    protected $fillable = ['title', 'short', 'description', 'url', 'date', 'position', 'active'];
 
 	protected $casts = [
 		'position' => 'integer',
