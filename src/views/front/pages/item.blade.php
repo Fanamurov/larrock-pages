@@ -1,4 +1,4 @@
-@extends('front.main')
+@extends('larrock::front.main')
 @section('title') {{ $data->get_seo_title }} @endsection
 
 @section('content')
