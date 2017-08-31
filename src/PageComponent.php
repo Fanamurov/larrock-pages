@@ -45,8 +45,11 @@ class PageComponent extends Component
         $count = \Cache::remember('count-data-admin-'. LarrockPages::getName(), 1440, function(){
             return LarrockPages::getModel()->count(['id']);
         });
-        $dropdown = LarrockPages::getModel()->whereActive(1)->orderBy('position', 'desc')->get(['id', 'title', 'url']);
-        return view('larrock::admin.sectionmenu.types.dropdown', ['count' => $count, 'app' => LarrockPages::getConfig(), 'url' => '/admin/'. LarrockPages::getName(), 'dropdown' => $dropdown]);
+        if($count > 0){
+            $dropdown = LarrockPages::getModel()->whereActive(1)->orderBy('position', 'desc')->get(['id', 'title', 'url']);
+            return view('larrock::admin.sectionmenu.types.dropdown', ['count' => $count, 'app' => LarrockPages::getConfig(), 'url' => '/admin/'. LarrockPages::getName(), 'dropdown' => $dropdown]);
+        }
+        return view('larrock::admin.sectionmenu.types.default', ['app' => LarrockPages::getConfig(), 'url' => '/admin/'. LarrockPages::getName()]);
     }
 
     public function createSitemap()
