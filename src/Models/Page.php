@@ -6,9 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 use Larrock\Core\Models\Seo;
 use Nicolaslopezj\Searchable\SearchableTrait;
 use Spatie\MediaLibrary\HasMedia\HasMediaTrait;
-use Spatie\MediaLibrary\HasMedia\Interfaces\HasMedia;
 use Spatie\MediaLibrary\HasMedia\Interfaces\HasMediaConversions;
 use Larrock\ComponentPages\Facades\LarrockPages;
+use Spatie\MediaLibrary\Media;
 
 /**
  * Larrock\Models\Page
@@ -60,16 +60,16 @@ class Page extends Model implements HasMediaConversions
         ]
     ];
 
-	public function registerMediaConversions()
-	{
-		$this->addMediaConversion('110x110')
-			->setManipulations(['w' => 110, 'h' => 110])
-			->performOnCollections('images');
+	public function registerMediaConversions(Media $media = null)
+    {
+        $this->addMediaConversion('110x110')
+            ->height(110)->width(110)
+            ->performOnCollections('images');
 
-		$this->addMediaConversion('140x140')
-			->setManipulations(['w' => 140, 'h' => 140])
-			->performOnCollections('images');
-	}
+        $this->addMediaConversion('140x140')
+            ->height(140)->width(140)
+            ->performOnCollections('images');
+    }
 
 	protected $casts = [
 		'position' => 'integer',
