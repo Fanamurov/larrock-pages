@@ -12,7 +12,7 @@ class AdminPageController extends AdminController
 	{
         $this->config = LarrockPages::shareConfig();
 
-        Breadcrumbs::setView('larrock::admin.breadcrumb.breadcrumb');
+        \Config::set('breadcrumbs.view', 'larrock::admin.breadcrumb.breadcrumb');
         Breadcrumbs::register('admin.'. LarrockPages::getName() .'.index', function($breadcrumbs){
             $breadcrumbs->push(LarrockPages::getTitle(), '/admin/'. LarrockPages::getName());
         });
