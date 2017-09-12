@@ -56,4 +56,9 @@ class PageComponent extends Component
     {
         return LarrockPages::getModel()->whereActive(1)->get();
     }
+
+    public function toDashboard()
+    {
+        return view('larrock::admin.dashboard.pages', ['component' => LarrockPages::getConfig()]);
+    }
 }
