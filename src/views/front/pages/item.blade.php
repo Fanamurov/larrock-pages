@@ -1,5 +1,11 @@
 @extends('larrock::front.main')
-@section('title') {{ $data->get_seo_title }} @endsection
+@section('title')
+    @if($seo_midd['url'])
+        {{ $seo_midd['url'] }}
+    @else
+        {{ $data->get_seo_title }} {{ $seo_midd['postfix_global'] }}
+    @endif
+@endsection
 
 @section('content')
     <div class="page-{{ $data->url }} uk-position-relative">
