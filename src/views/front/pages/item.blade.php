@@ -13,6 +13,6 @@
             <a class="admin_edit" href="/admin/page/{{ $data->id }}/edit">Редактировать</a>
         @endrole
         <h1>{{ $data->title }}</h1>
-        <div class="page_description">{!! $data->description !!}</div>
+        <div class="page_description">{!! $data->description_render !!}</div>
     </div>
 @endsection

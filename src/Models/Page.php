@@ -3,6 +3,7 @@
 namespace Larrock\ComponentPages\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Larrock\Core\Helpers\Plugins\RenderPlugins;
 use Larrock\Core\Models\Seo;
 use Nicolaslopezj\Searchable\SearchableTrait;
 use Spatie\MediaLibrary\HasMedia\HasMediaTrait;
@@ -100,10 +101,14 @@ class Page extends Model implements HasMediaConversions
 	public function getGetSeoTitleAttribute()
 	{
 		if($get_seo = Seo::whereSeoUrlConnect($this->url)->whereSeoTypeConnect('page')->first()){
-			return $get_seo->seo_title;
+		    if($get_seo->seo_title){
+                return $get_seo->seo_title;
+            }
 		}
 		if($get_seo = Seo::whereSeoIdConnect($this->id)->whereSeoTypeConnect('page')->first()){
-			return $get_seo->seo_title;
+            if($get_seo->seo_title){
+                return $get_seo->seo_title;
+            }
 		}
 		return $this->title;
 	}
@@ -111,5 +116,19 @@ class Page extends Model implements HasMediaConversions
     public function getFullUrlAttribute()
     {
         return '/page/'. $this->url;
+    }
+
+    /**
+     * Замена тегов плагинов на их данные
+     *
+     * @return mixed
+     */
+    public function getDescriptionRenderAttribute()
+    {
+        return \Cache::remember('DescriptionRenderPage'. $this->id, 1440, function(){
+            $renderPlugins = new RenderPlugins($this->description, $this);
+            $render = $renderPlugins->renderBlocks()->renderImageGallery()->renderFilesGallery();
+            return $render->rendered_html;
+        });
     }
 }
