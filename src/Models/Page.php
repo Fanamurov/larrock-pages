@@ -4,12 +4,12 @@ namespace Larrock\ComponentPages\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Larrock\Core\Helpers\Plugins\RenderPlugins;
-use Larrock\Core\Models\Seo;
+use Larrock\Core\Traits\GetFilesAndImages;
+use Larrock\Core\Traits\GetSeo;
 use Nicolaslopezj\Searchable\SearchableTrait;
 use Spatie\MediaLibrary\HasMedia\HasMediaTrait;
 use Spatie\MediaLibrary\HasMedia\Interfaces\HasMediaConversions;
 use Larrock\ComponentPages\Facades\LarrockPages;
-use Spatie\MediaLibrary\Media;
 
 /**
  * Larrock\Models\Page
@@ -45,14 +45,18 @@ use Spatie\MediaLibrary\Media;
  */
 class Page extends Model implements HasMediaConversions
 {
-	use HasMediaTrait;
+    use HasMediaTrait;
     use SearchableTrait;
+    use GetFilesAndImages;
+    use GetSeo;
 
     public function __construct(array $attributes = [])
     {
         parent::__construct($attributes);
         $this->fillable(LarrockPages::addFillableUserRows(['title', 'short', 'description', 'url', 'date', 'position', 'active']));
         $this->table = LarrockPages::getConfig()->table;
+        $this->modelName = LarrockPages::getModelName();
+        $this->componentName = 'page';
     }
 
     protected $searchable = [
@@ -61,57 +65,13 @@ class Page extends Model implements HasMediaConversions
         ]
     ];
 
-	public function registerMediaConversions(Media $media = null)
-    {
-        $this->addMediaConversion('110x110')
-            ->height(110)->width(110)
-            ->performOnCollections('images');
+    protected $casts = [
+        'position' => 'integer',
+        'active' => 'integer'
+    ];
 
-        $this->addMediaConversion('140x140')
-            ->height(140)->width(140)
-            ->performOnCollections('images');
-    }
+    protected $dates = ['created_at', 'updated_at', 'date'];
 
-	protected $casts = [
-		'position' => 'integer',
-		'active' => 'integer'
-	];
-
-	protected $dates = ['created_at', 'updated_at', 'date'];
-
-	public function get_seo()
-	{
-		return $this->hasOne(Seo::class, 'seo_id_connect', 'id')->whereSeoTypeConnect('page');
-	}
-
-	public function getImages()
-	{
-		return $this->hasMany('Spatie\MediaLibrary\Media', 'model_id', 'id')->where([['model_type', '=', LarrockPages::getModelName()], ['collection_name', '=', 'images']])->orderBy('order_column', 'DESC');
-	}
-	public function getFirstImage()
-	{
-		return $this->hasOne('Spatie\MediaLibrary\Media', 'model_id', 'id')->where([['model_type', '=', LarrockPages::getModelName()], ['collection_name', '=', 'images']])->orderBy('order_column', 'DESC');
-	}
-
-    public function getFiles()
-    {
-        return $this->hasMany('Spatie\MediaLibrary\Media', 'model_id', 'id')->where([['model_type', '=', LarrockPages::getModelName()], ['collection_name', '=', 'files']])->orderBy('order_column', 'DESC');
-    }
-
-	public function getGetSeoTitleAttribute()
-	{
-		if($get_seo = Seo::whereSeoUrlConnect($this->url)->whereSeoTypeConnect('page')->first()){
-		    if($get_seo->seo_title){
-                return $get_seo->seo_title;
-            }
-		}
-		if($get_seo = Seo::whereSeoIdConnect($this->id)->whereSeoTypeConnect('page')->first()){
-            if($get_seo->seo_title){
-                return $get_seo->seo_title;
-            }
-		}
-		return $this->title;
-	}
 
     public function getFullUrlAttribute()
     {
