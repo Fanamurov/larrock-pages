@@ -3,9 +3,7 @@
 namespace Larrock\ComponentPages;
 
 use App\Http\Controllers\Controller;
-use Larrock\Core\Helpers\Plugins\RenderGallery;
 use Cache;
-use Larrock\ComponentPages\Models\Page;
 use Larrock\ComponentPages\Facades\LarrockPages;
 
 class PageController extends Controller
@@ -17,11 +15,8 @@ class PageController extends Controller
 
     public function getItem($url)
 	{
-		$data = Cache::remember('page'. $url, 1440, function() use ($url) {
-			$page = LarrockPages::getModel()->whereUrl($url)->with(['get_seo', 'getImages', 'getFiles'])->firstOrFail();
-			$renderGallery = new RenderGallery();
-			$data['data'] = $renderGallery->renderFilesGallery($renderGallery->renderGallery($page));
-		    return $data;
+		$data['data'] = Cache::remember('page'. $url, 1440, function() use ($url) {
+			return LarrockPages::getModel()->whereUrl($url)->with(['get_seo', 'getImages', 'getFiles'])->firstOrFail();
 		});
 
 		if(\View::exists('larrock::front.pages.'. $url)){
