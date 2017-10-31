@@ -2,6 +2,7 @@
 
 namespace Larrock\ComponentPages;
 
+use Cache;
 use Larrock\Core\Component;
 use Larrock\Core\Helpers\FormBuilder\FormDate;
 use Larrock\Core\Helpers\FormBuilder\FormInput;
@@ -60,5 +61,23 @@ class PageComponent extends Component
     public function toDashboard()
     {
         return view('larrock::admin.dashboard.pages', ['component' => LarrockPages::getConfig()]);
+    }
+
+    public function search()
+    {
+        return Cache::remember('search'. $this->name, 1440, function(){
+            $data = [];
+            foreach (LarrockPages::getModel()->whereActive(1)->get(['id', 'title', 'url']) as $item){
+                $data[$item->id]['id'] = $item->id;
+                $data[$item->id]['title'] = $item->title;
+                $data[$item->id]['full_url'] = $item->full_url;
+                $data[$item->id]['component'] = $this->name;
+                $data[$item->id]['category'] = NULL;
+            }
+            if(count($data) === 0){
+                return NULL;
+            }
+            return $data;
+        });
     }
 }
