@@ -76,7 +76,7 @@ class Page extends Model implements HasMediaConversions
     {
         return $query->where('active', 1);
     }
-
+    
     public function getFullUrlAttribute()
     {
         return '/page/'. $this->url;
@@ -89,7 +89,11 @@ class Page extends Model implements HasMediaConversions
      */
     public function getDescriptionRenderAttribute()
     {
-        return \Cache::remember('DescriptionRenderPage'. $this->id, 1440, function(){
+        $cache_key = 'DescriptionRender'. $this->table.'-'. $this->id;
+        if(\Auth::check()){
+            $cache_key .= '-'. \Auth::user()->role->first()->level;
+        }
+        return \Cache::remember($cache_key, 1440, function(){
             $renderPlugins = new RenderPlugins($this->description, $this);
             $render = $renderPlugins->renderBlocks()->renderImageGallery()->renderFilesGallery();
             return $render->rendered_html;
