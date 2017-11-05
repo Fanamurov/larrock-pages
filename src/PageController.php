@@ -18,10 +18,6 @@ class PageController extends Controller
 		$data['data'] = Cache::remember('page'. $url, 1440, function() use ($url) {
 			return LarrockPages::getModel()->whereUrl($url)->with(['get_seo', 'getImages', 'getFiles'])->active()->firstOrFail();
 		});
-
-		if(\View::exists('larrock::front.pages.'. $url)){
-			return view('larrock::front.pages.'. $url, $data);
-		}
-        return view('larrock::front.pages.item', $data);
+		return view()->first(['larrock::front.pages.'. $url, 'larrock::front.pages.item'], $data);
 	}
 }
