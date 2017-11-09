@@ -2,12 +2,15 @@
 
 namespace Larrock\ComponentPages;
 
-use Larrock\Core\AdminController;
+use Illuminate\Routing\Controller;
 use Breadcrumbs;
 use Larrock\ComponentPages\Facades\LarrockPages;
+use Larrock\Core\Traits\AdminMethods;
 
-class AdminPageController extends AdminController
+class AdminPageController extends Controller
 {
+    use AdminMethods;
+
 	public function __construct()
 	{
         $this->config = LarrockPages::shareConfig();
