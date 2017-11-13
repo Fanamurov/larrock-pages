@@ -10,6 +10,7 @@ use Nicolaslopezj\Searchable\SearchableTrait;
 use Spatie\MediaLibrary\HasMedia\HasMediaTrait;
 use Spatie\MediaLibrary\HasMedia\Interfaces\HasMediaConversions;
 use Larrock\ComponentPages\Facades\LarrockPages;
+use Larrock\Core\Component;
 
 /**
  * Larrock\Models\Page
@@ -45,6 +46,11 @@ use Larrock\ComponentPages\Facades\LarrockPages;
  */
 class Page extends Model implements HasMediaConversions
 {
+    /**
+     * @var $this Component
+     */
+    public $component;
+
     use HasMediaTrait;
     use SearchableTrait;
     use GetFilesAndImages;
@@ -54,9 +60,7 @@ class Page extends Model implements HasMediaConversions
     {
         parent::__construct($attributes);
         $this->fillable(LarrockPages::addFillableUserRows(['title', 'short', 'description', 'url', 'date', 'position', 'active']));
-        $this->table = LarrockPages::getConfig()->table;
-        $this->modelName = LarrockPages::getModelName();
-        $this->componentName = 'page';
+        $this->component = LarrockPages::getConfig();
     }
 
     protected $searchable = [
@@ -89,7 +93,7 @@ class Page extends Model implements HasMediaConversions
      */
     public function getDescriptionRenderAttribute()
     {
-        $cache_key = 'DescriptionRender'. $this->table.'-'. $this->id;
+        $cache_key = 'DescriptionRender'. $this->component->table.'-'. $this->id;
         if(\Auth::check()){
             $cache_key .= '-'. \Auth::user()->role->first()->level;
         }
