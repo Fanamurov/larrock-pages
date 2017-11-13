@@ -63,7 +63,7 @@ class PageComponent extends Component
         return view('larrock::admin.dashboard.pages', ['component' => LarrockPages::getConfig()]);
     }
 
-    public function search($admin)
+    public function search($admin = NULL)
     {
         return Cache::remember('search'. $this->name. $admin, 1440, function() use ($admin){
             $data = [];
