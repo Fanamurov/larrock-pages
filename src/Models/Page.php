@@ -61,6 +61,7 @@ class Page extends Model implements HasMediaConversions
         parent::__construct($attributes);
         $this->fillable(LarrockPages::addFillableUserRows(['title', 'short', 'description', 'url', 'date', 'position', 'active']));
         $this->component = LarrockPages::getConfig();
+        $this->table = LarrockPages::getTable();
     }
 
     protected $searchable = [
