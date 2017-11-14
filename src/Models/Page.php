@@ -49,7 +49,7 @@ class Page extends Model implements HasMediaConversions
     /**
      * @var $this Component
      */
-    public $component;
+    public $config;
 
     use HasMediaTrait;
     use SearchableTrait;
@@ -60,7 +60,7 @@ class Page extends Model implements HasMediaConversions
     {
         parent::__construct($attributes);
         $this->fillable(LarrockPages::addFillableUserRows(['title', 'short', 'description', 'url', 'date', 'position', 'active']));
-        $this->component = LarrockPages::getConfig();
+        $this->config = LarrockPages::getConfig();
         $this->table = LarrockPages::getTable();
     }
 
@@ -94,7 +94,7 @@ class Page extends Model implements HasMediaConversions
      */
     public function getDescriptionRenderAttribute()
     {
-        $cache_key = 'DescriptionRender'. $this->component->table.'-'. $this->id;
+        $cache_key = 'DescriptionRender'. $this->config->table.'-'. $this->id;
         if(\Auth::check()){
             $cache_key .= '-'. \Auth::user()->role->first()->level;
         }
