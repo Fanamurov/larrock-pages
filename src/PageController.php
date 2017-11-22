@@ -11,6 +11,7 @@ class PageController extends Controller
 	public function __construct()
 	{
         LarrockPages::shareConfig();
+        $this->middleware(LarrockPages::combineFrontMiddlewares());
 	}
 
     public function getItem($url)
