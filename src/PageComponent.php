@@ -30,13 +30,13 @@ class PageComponent extends Component
     protected function addRows()
     {
         $row = new FormInput('title', 'Заголовок');
-        $this->rows['title'] = $row->setValid('max:255|required')->setTypo();
+        $this->rows['title'] = $row->setValid('max:255|required')->setTypo()->setFillable();
 
         $row = new FormTextarea('description', 'Текст');
-        $this->rows['description'] = $row->setTypo();
+        $this->rows['description'] = $row->setTypo()->setFillable();
 
         $row = new FormDate('date', 'Дата материала');
-        $this->rows['date'] = $row->setTab('other', 'Дата, вес, активность');
+        $this->rows['date'] = $row->setTab('other', 'Дата, вес, активность')->setFillable();
 
         return $this;
     }

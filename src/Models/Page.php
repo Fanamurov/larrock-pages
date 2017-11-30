@@ -5,6 +5,7 @@ namespace Larrock\ComponentPages\Models;
 use Illuminate\Database\Eloquent\Model;
 use Larrock\Core\Helpers\Plugins\RenderPlugins;
 use Larrock\Core\Traits\GetFilesAndImages;
+use Larrock\Core\Traits\GetLink;
 use Larrock\Core\Traits\GetSeo;
 use Nicolaslopezj\Searchable\SearchableTrait;
 use Spatie\MediaLibrary\HasMedia\HasMediaTrait;
@@ -13,7 +14,7 @@ use Larrock\ComponentPages\Facades\LarrockPages;
 use Larrock\Core\Component;
 
 /**
- * Larrock\Models\Page
+ * Larrock\ComponentPages\Models\Page
  *
  * @property integer $id
  * @property string $title
@@ -55,11 +56,12 @@ class Page extends Model implements HasMediaConversions
     use SearchableTrait;
     use GetFilesAndImages;
     use GetSeo;
+    use GetLink;
 
     public function __construct(array $attributes = [])
     {
         parent::__construct($attributes);
-        $this->fillable(LarrockPages::addFillableUserRows(['title', 'short', 'description', 'url', 'date', 'position', 'active']));
+        $this->fillable(LarrockPages::addFillableUserRows([]));
         $this->config = LarrockPages::getConfig();
         $this->table = LarrockPages::getTable();
     }
