@@ -79,6 +79,11 @@ class Page extends Model implements HasMediaConversions
 
     protected $dates = ['created_at', 'updated_at', 'date'];
 
+    public function getConfig()
+    {
+        return $this->config;
+    }
+
     public function scopeActive($query)
     {
         return $query->where('active', 1);
