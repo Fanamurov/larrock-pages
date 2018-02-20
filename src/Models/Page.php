@@ -12,6 +12,7 @@ use Spatie\MediaLibrary\HasMedia\HasMediaTrait;
 use Spatie\MediaLibrary\HasMedia\Interfaces\HasMediaConversions;
 use Larrock\ComponentPages\Facades\LarrockPages;
 use Larrock\Core\Component;
+use Cache;
 
 /**
  * Larrock\ComponentPages\Models\Page
@@ -27,6 +28,7 @@ use Larrock\Core\Component;
  * @property integer $active
  * @property \Carbon\Carbon $created_at
  * @property \Carbon\Carbon $updated_at
+ * @property mixed $description_render
  * @property-read \Larrock\Core\Models\Seo $seo
  * @method static \Illuminate\Database\Query\Builder|\Larrock\ComponentPages\Models\Page whereId($value)
  * @method static \Illuminate\Database\Query\Builder|\Larrock\ComponentPages\Models\Page whereTitle($value)
@@ -47,9 +49,7 @@ use Larrock\Core\Component;
  */
 class Page extends Model implements HasMediaConversions
 {
-    /**
-     * @var $this Component
-     */
+    /** @var $this Component */
     protected $config;
 
     use HasMediaTrait;
@@ -105,7 +105,7 @@ class Page extends Model implements HasMediaConversions
         if(\Auth::check()){
             $cache_key .= '-'. \Auth::user()->role->first()->level;
         }
-        return \Cache::remember($cache_key, 1440, function(){
+        return Cache::rememberForever($cache_key, function(){
             $renderPlugins = new RenderPlugins($this->description, $this);
             $render = $renderPlugins->renderBlocks()->renderImageGallery()->renderFilesGallery();
             return $render->rendered_html;

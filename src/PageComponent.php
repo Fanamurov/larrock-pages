@@ -43,12 +43,13 @@ class PageComponent extends Component
 
     public function renderAdminMenu()
     {
-        $count = \Cache::remember('count-data-admin-'. LarrockPages::getName(), 1440, function(){
+        $count = Cache::rememberForever('count-data-admin-'. LarrockPages::getName(), function(){
             return LarrockPages::getModel()->count(['id']);
         });
         if($count > 0){
             $dropdown = LarrockPages::getModel()->whereActive(1)->orderBy('position', 'desc')->get(['id', 'title', 'url']);
-            return view('larrock::admin.sectionmenu.types.dropdown', ['count' => $count, 'app' => LarrockPages::getConfig(), 'url' => '/admin/'. LarrockPages::getName(), 'dropdown' => $dropdown]);
+            return view('larrock::admin.sectionmenu.types.dropdown', ['count' => $count, 'app' => LarrockPages::getConfig(),
+                'url' => '/admin/'. LarrockPages::getName(), 'dropdown' => $dropdown]);
         }
         return view('larrock::admin.sectionmenu.types.default', ['app' => LarrockPages::getConfig(), 'url' => '/admin/'. LarrockPages::getName()]);
     }
@@ -65,10 +66,10 @@ class PageComponent extends Component
 
     public function search($admin = NULL)
     {
-        return Cache::remember('search'. $this->name. $admin, 1440, function() use ($admin){
+        return Cache::rememberForever('search'. $this->name. $admin, function() use ($admin){
             $data = [];
             if($admin){
-                $items = LarrockPages::getModel()->whereActive(1)->get(['id', 'title', 'url']);
+                $items = LarrockPages::getModel()->get(['id', 'title', 'url']);
             }else{
                 $items = LarrockPages::getModel()->whereActive(1)->get(['id', 'title', 'url']);
             }
@@ -79,7 +80,7 @@ class PageComponent extends Component
                 $data[$item->id]['component'] = $this->name;
                 $data[$item->id]['category'] = NULL;
             }
-            if(count($data) === 0){
+            if(\count($data) === 0){
                 return NULL;
             }
             return $data;
