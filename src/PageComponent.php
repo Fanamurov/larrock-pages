@@ -7,7 +7,7 @@ use Larrock\Core\Component;
 use Larrock\Core\Helpers\FormBuilder\FormDate;
 use Larrock\Core\Helpers\FormBuilder\FormInput;
 use Larrock\Core\Helpers\FormBuilder\FormTextarea;
-use Larrock\ComponentPages\Facades\LarrockPages;
+use LarrockPages;
 use Larrock\ComponentPages\Models\Page;
 
 class PageComponent extends Component
@@ -36,8 +36,7 @@ class PageComponent extends Component
         $this->rows['description'] = $row->setTypo()->setFillable();
 
         $row = new FormDate('date', 'Дата материала');
-        $this->rows['date'] = $row->setTab('other', 'Дата, вес, активность')->setFillable();
-
+        $this->rows['date'] = $row->setFillable()->setCssClassGroup('uk-width-1-3');
         return $this;
     }
 
@@ -61,7 +60,10 @@ class PageComponent extends Component
 
     public function toDashboard()
     {
-        return view('larrock::admin.dashboard.pages', ['component' => LarrockPages::getConfig()]);
+        $data = Cache::rememberForever('LarrockPagesItemsDashboard', function(){
+            return LarrockPages::getModel()->latest('updated_at')->take(5)->get();
+        });
+        return view('larrock::admin.dashboard.pages', ['component' => LarrockPages::getConfig(), 'data' => $data]);
     }
 
     public function search($admin = NULL)

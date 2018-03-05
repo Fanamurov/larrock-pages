@@ -4,7 +4,7 @@ namespace Larrock\ComponentPages;
 
 use App\Http\Controllers\Controller;
 use Cache;
-use Larrock\ComponentPages\Facades\LarrockPages;
+use LarrockPages;
 
 class PageController extends Controller
 {

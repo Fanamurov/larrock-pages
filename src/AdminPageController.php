@@ -3,7 +3,7 @@
 namespace Larrock\ComponentPages;
 
 use Illuminate\Routing\Controller;
-use Larrock\ComponentPages\Facades\LarrockPages;
+use LarrockPages;
 use Larrock\Core\Traits\AdminMethods;
 
 class AdminPageController extends Controller
