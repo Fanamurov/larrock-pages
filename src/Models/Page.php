@@ -10,10 +10,10 @@ use Larrock\Core\Traits\GetSeo;
 use Nicolaslopezj\Searchable\SearchableTrait;
 use Spatie\MediaLibrary\HasMedia\HasMediaTrait;
 use Spatie\MediaLibrary\HasMedia\Interfaces\HasMediaConversions;
-use Larrock\ComponentPages\Facades\LarrockPages;
+use LarrockPages;
 use Larrock\Core\Component;
 use Cache;
-use Media;
+use Spatie\MediaLibrary\Media;
 
 /**
  * Larrock\ComponentPages\Models\Page
