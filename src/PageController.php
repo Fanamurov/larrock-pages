@@ -17,7 +17,7 @@ class PageController extends Controller
     public function getItem($url)
 	{
 		$data['data'] = Cache::rememberForever('page'. $url, function() use ($url) {
-			return LarrockPages::getModel()->whereUrl($url)->with(['get_seo', 'getImages', 'getFiles'])->active()->firstOrFail();
+			return LarrockPages::getModel()->whereUrl($url)->with(['getSeo', 'getImages', 'getFiles'])->active()->firstOrFail();
 		});
 		return view()->first([config('larrock.views.pages.itemUniq.'. $url, 'larrock::front.pages.'. $url),
             config('larrock.views.pages.item', 'larrock::front.pages.item')], $data);

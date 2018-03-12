@@ -97,8 +97,8 @@ class Page extends Model implements HasMediaConversions
 
     /**
      * Замена тегов плагинов на их данные
-     *
      * @return mixed
+     * @throws \Throwable
      */
     public function getDescriptionRenderAttribute()
     {
