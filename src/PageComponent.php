@@ -46,7 +46,9 @@ class PageComponent extends Component
             return LarrockPages::getModel()->count(['id']);
         });
         if($count > 0){
-            $dropdown = LarrockPages::getModel()->whereActive(1)->orderBy('position', 'desc')->get(['id', 'title', 'url']);
+            $dropdown = Cache::rememberForever('dropdownAdminMenu'. LarrockPages::getName(), function () {
+                return LarrockPages::getModel()->whereActive(1)->orderBy('position', 'desc')->get(['id', 'title', 'url']);
+            });
             return view('larrock::admin.sectionmenu.types.dropdown', ['count' => $count, 'app' => LarrockPages::getConfig(),
                 'url' => '/admin/'. LarrockPages::getName(), 'dropdown' => $dropdown]);
         }
