@@ -8,12 +8,12 @@ use Larrock\Core\Traits\GetFilesAndImages;
 use Larrock\Core\Traits\GetLink;
 use Larrock\Core\Traits\GetSeo;
 use Nicolaslopezj\Searchable\SearchableTrait;
+use Spatie\MediaLibrary\HasMedia\HasMedia;
 use Spatie\MediaLibrary\HasMedia\HasMediaTrait;
-use Spatie\MediaLibrary\HasMedia\Interfaces\HasMediaConversions;
 use LarrockPages;
 use Larrock\Core\Component;
 use Cache;
-use Spatie\MediaLibrary\Media;
+use Spatie\MediaLibrary\Models\Media;
 
 /**
  * Larrock\ComponentPages\Models\Page
@@ -43,21 +43,17 @@ use Spatie\MediaLibrary\Media;
  * @method static \Illuminate\Database\Query\Builder|\Larrock\ComponentPages\Models\Page whereCreatedAt($value)
  * @method static \Illuminate\Database\Query\Builder|\Larrock\ComponentPages\Models\Page whereUpdatedAt($value)
  * @method static \Illuminate\Database\Query\Builder|\Larrock\ComponentPages\Models\Page find($value)
- * @property-read \Illuminate\Database\Eloquent\Collection|\Spatie\MediaLibrary\Media[] $media
+ * @property-read \Illuminate\Database\Eloquent\Collection|\Spatie\MediaLibrary\Models\Media[] $media
  * @mixin \Eloquent
  * @property-read mixed $get_seo_title
  * @property-read mixed $full_url
  */
-class Page extends Model implements HasMediaConversions
+class Page extends Model implements HasMedia
 {
     /** @var $this Component */
     protected $config;
 
-    use HasMediaTrait;
-    use SearchableTrait;
-    use GetFilesAndImages;
-    use GetSeo;
-    use GetLink;
+    use SearchableTrait, GetFilesAndImages, GetSeo, GetLink;
 
     public function __construct(array $attributes = [])
     {
@@ -126,16 +122,12 @@ class Page extends Model implements HasMediaConversions
                 ? $this->media
                 : collect($this->unAttachedMediaLibraryItems)->pluck('media');
 
-            return $collection
-                ->filter(function (Media $mediaItem) use ($collectionName) {
-                    if ($collectionName == '') {
+            return $collection->filter(function (Media $mediaItem) use ($collectionName) {
+                    if ($collectionName === '') {
                         return true;
                     }
-
                     return $mediaItem->collection_name === $collectionName;
-                })
-                ->sortBy('order_column')
-                ->values();
+                })->sortBy('order_column')->values();
         });
     }
 }
