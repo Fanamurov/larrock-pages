@@ -6,7 +6,7 @@
                 <ul class="uk-list">
                     @foreach($data as $value)
                         <li>
-                            <a href="/admin/{{ $component->name }}/{{ $value->full_url }}/edit">{{ $value->title }}</a>
+                            <a href="/admin/{{ $component->name }}/{{ $value->id }}/edit">{{ $value->title }}</a>
                             <a target="_blank" href="{{ $value->full_url }}"><span uk-icon="icon: link"></span></a>
                             @if($value->active !== 1)
                                 <span class="uk-label uk-label-danger">Не опубликован</span>
