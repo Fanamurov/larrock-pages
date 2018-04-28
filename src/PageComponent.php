@@ -72,28 +72,4 @@ class PageComponent extends Component
 
         return view('larrock::admin.dashboard.pages', ['component' => LarrockPages::getConfig(), 'data' => $data]);
     }
-
-    public function search($admin = null)
-    {
-        return Cache::rememberForever('search'.$this->name.$admin, function () use ($admin) {
-            $data = [];
-            if ($admin) {
-                $items = LarrockPages::getModel()->get(['id', 'title', 'url']);
-            } else {
-                $items = LarrockPages::getModel()->whereActive(1)->get(['id', 'title', 'url']);
-            }
-            foreach ($items as $item) {
-                $data[$item->id]['id'] = $item->id;
-                $data[$item->id]['title'] = $item->title;
-                $data[$item->id]['full_url'] = $item->full_url;
-                $data[$item->id]['component'] = $this->name;
-                $data[$item->id]['category'] = null;
-            }
-            if (\count($data) === 0) {
-                return null;
-            }
-
-            return $data;
-        });
-    }
 }
