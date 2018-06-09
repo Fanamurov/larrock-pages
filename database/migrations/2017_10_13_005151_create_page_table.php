@@ -16,7 +16,7 @@ class CreatePageTable extends Migration {
 		{
 			$table->increments('id');
 			$table->char('title');
-			$table->text('description');
+			$table->text('description')->nullable();
 			$table->char('url', 191)->unique();
 			$table->timestamp('date')->default(DB::raw('CURRENT_TIMESTAMP'));
 			$table->integer('position')->default(0);
